@@ -173,7 +173,7 @@ fun LibraryScreen(
     val isPlayerExpanded by viewModel.isPlayerExpanded.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
 
-    var activeTab by remember { mutableStateOf("") }
+    var activeTab by remember { mutableStateOf("Device Files") }
     var searchQuery by remember { mutableStateOf("") }
     var sortOrder by remember { mutableStateOf(SortOrder.A_Z) }
     var isRefreshing by remember { mutableStateOf(false) }
@@ -346,11 +346,6 @@ fun LibraryScreen(
                 // Horizontal scroll chips row
             val tabs = listOf(
                 "Playlists",
-                "Recap",
-                "Podcasts",
-                "Songs",
-                "Albums",
-                "Artists",
                 "Device Files"
             )
 
@@ -367,7 +362,7 @@ fun LibraryScreen(
                     FilterChip(
                         selected = isSelected,
                         onClick = {
-                            activeTab = if (isSelected) "" else tabName
+                            activeTab = tabName
                         },
                         label = { Text(tabName, fontWeight = FontWeight.SemiBold) },
                         shape = RoundedCornerShape(8.dp),
@@ -389,12 +384,7 @@ fun LibraryScreen(
             ) {
                 when (activeTab) {
                     "Playlists" -> PlaylistsTabContent(nestedScrollConnection, viewModel)
-                    "Podcasts" -> PodcastsTabContent(nestedScrollConnection)
-                    "Songs" -> SongsTabContent(nestedScrollConnection, viewModel)
-                    "Albums" -> AlbumsTabContent(nestedScrollConnection)
-                    "Artists" -> ArtistsTabContent(nestedScrollConnection)
-                    "Recap" -> RecapTabContent(nestedScrollConnection, viewModel, onNavigateToExplore)
-                    "Device Files" -> {
+                    else -> {
                         // Scan Local Files helper
                         val onRefreshAction = {
                             scope.launch {
@@ -740,7 +730,6 @@ fun LibraryScreen(
                             }
                         }
                     }
-                    "" -> UnifiedLibraryContent(nestedScrollConnection)
                 }
             }
         }
